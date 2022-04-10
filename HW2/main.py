@@ -9,30 +9,33 @@ qq = pd.read_csv('data.csv')
 nlp = spacy.load('en_core_web_sm',disable=['ner','textcat'])
 subid = []
 sublabel = []
+text = ""
 for i in range(len(qq)):
+    i = 19
     S_flag = False
     V_flag = False
     O_flag = False
-    text = qq['sentence'][i]
+    if(text != qq['sentence'][i]):
+        text = qq['sentence'][i]
     subid.append(qq['id'][i])
     # create spacy 
     doc = nlp(text)
 
     for token in doc:
-        # print(token.text,'->',token.pos_)
-        if (token.dep_=='nsubj' and qq['S'][i] == token.dep_):
+        print(token.text,'->',token.dep_)
+        if (token.dep_=='nsubj' and qq['S'][i] == token.text):
             S_flag = True
 
-        elif (token.dep_=='dobj'and qq['O'][i] == token.dep_):
+        elif (token.dep_=='dobj'and qq['O'][i] == token.text):
             O_flag = True
 
-        elif (token.dep_=='ROOT'and qq['V'][i] == token.dep_):
+        elif (token.dep_=='pcomp'and qq['V'][i] == token.text):
             V_flag = True
     if(S_flag and O_flag and V_flag):
         sublabel.append(1)
     else:
         sublabel.append(0)
-
+    break
 dict = {'id': subid, 'label': sublabel} 
 df = pd.DataFrame(dict) 
 df.to_csv('submission.csv',index = None)
