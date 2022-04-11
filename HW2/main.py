@@ -22,7 +22,7 @@ for i in range(len(qq)):
     doc = nlp(text)
 
     for token in doc:
-        print(token.text,'->',token.dep_)
+        
         if (token.dep_=='nsubj' and qq['S'][i] == token.text):
             S_flag = True
 
@@ -35,7 +35,7 @@ for i in range(len(qq)):
         sublabel.append(1)
     else:
         sublabel.append(0)
-    break
+    
 dict = {'id': subid, 'label': sublabel} 
 df = pd.DataFrame(dict) 
 df.to_csv('submission.csv',index = None)
